@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:24:58 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/23 16:29:58 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/23 16:56:39 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,17 @@ int get_next_line(int fd, char **line)
 		return (-1);
 	if (leftover)
 	{
+		printf("leftover after 1st call: %s\n", leftover);
 		 if(ft_strchr(leftover, '\n'))
 		{
 			*line = line_in_leftover(*line, leftover);
 			leftover = ft_strchr(leftover, '\n') + 1;
+			printf("leftover after founding line in it: %s\n", leftover);
 			if(leftover[0] == '\0')
 			{
 				//free(leftover);
 				return(0);
 			}
-			return (1);
 		}
 		else
 			*line = ft_strdup(leftover);
@@ -70,7 +71,9 @@ int get_next_line(int fd, char **line)
 			break;
 		}
 	}
-	printf("leftover: %s\n", leftover);
+	printf("leftover begin: %s\n", leftover);
+	if(leftover[0] == '\0')
+		return (0);
 	//free(leftover);
 	return (1);
 }
