@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:24:58 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/23 16:56:39 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/23 18:16:05 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ int main()
 
 	fd = open("texte.txt", O_RDONLY);
 
-	printf("line output:%s\nstatus output:%d\n", line, get_next_line(fd, &line));
+	printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
 	free(line);
-	printf("line output:%s\nstatus output:%d\n", line, get_next_line(fd, &line));
+	printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
 	free(line);
-	printf("line output:%s\nstatus output:%d\n", line, get_next_line(fd, &line));
+	printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
 	free(line);
 	//get_next_line(fd, &line);
 	//printf("line on main output :%s\n", line);
