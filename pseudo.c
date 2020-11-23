@@ -6,12 +6,19 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:24:58 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/23 18:16:05 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/23 22:14:17 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_v3.h"
 #include <string.h>
+
+int		ft_free(char *to_free, int ret)
+{
+	free(to_free);
+	to_free = NULL;
+	return(ret);
+}
 
 char *line_in_leftover(char *line, char *leftover)
 {
@@ -32,35 +39,30 @@ int get_next_line(int fd, char **line)
 	char		buf[BUFFER_SIZE + 1];
 	static char	*leftover;
 	int			read_size;
+	char 		*tmp_buf;
+	int 		i;
 
-	char *tmp_buf;
-	int i;
 	printf("CALL GNL\n\n");
 	*line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
 		return (-1);
 	if (leftover)
 	{
-		printf("leftover after 1st call: %s\n", leftover);
-		 if(ft_strchr(leftover, '\n'))
+		printf("leftover after previous call: %s\n", leftover);
+		 if (ft_strchr(leftover, '\n'))
 		{
 			*line = line_in_leftover(*line, leftover);
 			leftover = ft_strchr(leftover, '\n') + 1;
 			printf("leftover after founding line in it: %s\n", leftover);
-			if(leftover[0] == '\0')
-			{
-				//free(leftover);
-				return(0);
-			}
+			return (1);
 		}
-		else
-			*line = ft_strdup(leftover);
+		*line = ft_strjoin(*line, leftover);
 	}
 	while ((read_size = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		i = 0;
 		buf[read_size] = 0;
-		while(buf[i] && buf[i] != '\n')
+		while (buf[i] && buf[i] != '\n')
 			i++;
 		tmp_buf = ft_substr(buf, 0, i);
 		*line = ft_strjoin(*line, tmp_buf);
@@ -68,13 +70,16 @@ int get_next_line(int fd, char **line)
 		if (ft_strchr(buf, '\n'))
 		{
 			leftover = ft_strdup(ft_strchr(buf, '\n') + 1);
-			break;
+			break ;
 		}
 	}
-	printf("leftover begin: %s\n", leftover);
-	if(leftover[0] == '\0')
-		return (0);
-	//free(leftover);
+	printf("leftover after readin loop: %s\n", leftover);
+	if (read_size < 0)
+		return (ft_free(leftover, -1));
+		//return (-1);
+	if ((leftover == NULL || leftover[0] == '\0') && read_size == 0)
+		return (ft_free(leftover, 0));
+		//return (0);
 	return (1);
 }
 
@@ -84,17 +89,23 @@ int main()
 	int fd;
 
 	fd = open("texte.txt", O_RDONLY);
-
-	printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+//MAC
+	//printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+	//free(line);
+	//printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+	//free(line);
+	//printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+	//free(line);
+	//printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+	//free(line);
+	//LINUX VM
+	printf("\033[0;31mline output:%s\n\033[0mstatus output:\033[0;31m%d\033[0m\n", line, get_next_line(fd, &line));
 	free(line);
-	printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+	printf("\033[0;31mline output:%s\n\033[0mstatus output:\033[0;31m%d\033[0m\n", line, get_next_line(fd, &line));
 	free(line);
-	printf("status output:%d\nline output:%s\n", get_next_line(fd, &line), line);
+	printf("\033[0;31mline output:%s\n\033[0mstatus output:\033[0;31m%d\033[0m\n", line, get_next_line(fd, &line));
 	free(line);
-	//get_next_line(fd, &line);
-	//printf("line on main output :%s\n", line);
-	//get_next_line(fd, &line);
-	//get_next_line(fd, &line);
-	//get_next_line(fd, &line);
+	printf("\033[0;31mline output:%s\n\033[0mstatus output:\033[0;31m%d\033[0m\n", line, get_next_line(fd, &line));
+	free(line);
 	return (0);
 }
