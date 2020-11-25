@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 15:31:07 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/25 17:42:51 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/25 22:53:16 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,20 @@ int			main(void)
 	char	*line;
 	int		fd;
 
-	fd = open("texte.txt", O_RDONLY);
+	line = "a";
+	fd = open("file086.txt", O_RDONLY);
+	printf("\033[0;31mline :%s\n\033[0mstatus :\033[0;31m%d\033[0m\n",
+			line, get_next_line(fd, &line));
+	free(line);
+	printf("\033[0;31mline :%s\n\033[0mstatus :\033[0;31m%d\033[0m\n",
+			line, get_next_line(fd, &line));
+	free(line);
+	printf("\033[0;31mline :%s\n\033[0mstatus :\033[0;31m%d\033[0m\n",
+			line, get_next_line(fd, &line));
+	free(line);
+	printf("\033[0;31mline :%s\n\033[0mstatus :\033[0;31m%d\033[0m\n",
+			line, get_next_line(fd, &line));
+	free(line);
 	printf("\033[0;31mline :%s\n\033[0mstatus :\033[0;31m%d\033[0m\n",
 			line, get_next_line(fd, &line));
 	free(line);
