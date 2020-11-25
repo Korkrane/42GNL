@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl_long.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:07:08 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/26 00:38:49 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/26 00:04:52 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		check_line(char *str)
+int			check_line(char *str)
 {
 	int i;
 
@@ -28,7 +28,7 @@ int		check_line(char *str)
 	return (0);
 }
 
-char	*store_leftover(char *tmp_buf)
+char		*store_leftover(char *tmp_buf)
 {
 	int		i;
 	char	*leftover;
@@ -42,7 +42,7 @@ char	*store_leftover(char *tmp_buf)
 	return (leftover);
 }
 
-char	*grep_found_line(char *tmp_buf)
+char		*grep_found_line(char *tmp_buf)
 {
 	char	*current_line;
 	int		i;
@@ -64,31 +64,7 @@ char	*grep_found_line(char *tmp_buf)
 	return (current_line);
 }
 
-int		ln_and_lftvr(char *tmp_buf, char *leftover, int read_size, char **line)
-{
-	if (read_size == 0 && (tmp_buf == NULL || tmp_buf[0] == '\0'))
-	{
-		free(tmp_buf);
-		if (leftover == NULL)
-			free(leftover);
-		*line = ft_strdup("");
-		return (0);
-	}
-	*line = grep_found_line(tmp_buf);
-	if (!check_line(tmp_buf))
-	{
-		free(leftover);
-		leftover = NULL;
-		free(tmp_buf);
-		return (0);
-	}
-	free(leftover);
-	leftover = store_leftover(tmp_buf);
-	free(tmp_buf);
-	return (1);
-}
-
-int		get_next_line(int fd, char **line)
+int			get_next_line(int fd, char **line)
 {
 	static char		*leftover;
 	int				read_size;
@@ -111,13 +87,24 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		}
 	}
-	/*
-	if (ln_and_lftvr(tmp_buf, leftover, read_size, line) == 1)
+	if (read_size == 0 && (tmp_buf == NULL || tmp_buf[0] == '\0'))
 	{
-		leftover = store_leftover(tmp_buf);
-		return (1);
+		free(tmp_buf);
+		if (leftover == NULL)
+			free(leftover);
+		*line = ft_strdup("");
+		return (0);
 	}
-	return (0);
-	*/
-	return (ln_and_lftvr(tmp_buf, leftover, read_size, line));
+	*line = grep_found_line(tmp_buf);
+	if (!check_line(tmp_buf))
+	{
+		free(leftover);
+		leftover = NULL;
+		free(tmp_buf);
+		return (0);
+	}
+	free(leftover);
+	leftover = store_leftover(tmp_buf);
+	free(tmp_buf);
+	return (1);
 }

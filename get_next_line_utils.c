@@ -6,13 +6,13 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:24:58 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/25 18:16:52 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/26 00:04:14 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void		*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	size_t			i;
 	unsigned char	*tmp_src;
@@ -107,13 +107,13 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 char	*free_then_join(char *s1, char *s2, int size_s1)
 {
-	char 	*str;
+	char	*str;
 	int		size_s2;
 
 	size_s2 = ft_strlen(s2);
 	if (!s1)
 		return (ft_strdup(s2));
-	if(!(str = malloc(sizeof(char) * size_s2 + size_s1 + 1)))
+	if (!(str = malloc(sizeof(char) * size_s2 + size_s1 + 1)))
 		return (NULL);
 	ft_memmove(str, s1, size_s1);
 	ft_memmove(&str[size_s1], s2, size_s2);

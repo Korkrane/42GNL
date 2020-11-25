@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:07:08 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/26 00:38:49 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/26 00:17:01 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,5 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		}
 	}
-	/*
-	if (ln_and_lftvr(tmp_buf, leftover, read_size, line) == 1)
-	{
-		leftover = store_leftover(tmp_buf);
-		return (1);
-	}
-	return (0);
-	*/
 	return (ln_and_lftvr(tmp_buf, leftover, read_size, line));
 }
