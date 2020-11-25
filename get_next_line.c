@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:07:08 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/25 15:37:21 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/25 17:40:25 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int			get_next_line(int fd, char **line)
 	char			*tmp_buf;
 
 	tmp_buf = NULL;
-	if (BUFFER_SIZE <= 0 || fd < 0 || !line || read(fd, buf, 0) < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || !line || read(fd, buf, 0) <  0)
 		return (-1);
 	if (leftover)
 		tmp_buf = ft_strdup(leftover);
@@ -85,11 +85,11 @@ int			get_next_line(int fd, char **line)
 			free(tmp_buf);
 			return (-1);
 		}
-		if (read_size == 0 && (tmp_buf == NULL || tmp_buf[0] == '\0'))
-		{
-			*line = ft_strdup("");
-			return (0);
-		}
+	}
+	if (read_size == 0 && (tmp_buf == NULL || tmp_buf[0] == '\0'))
+	{
+		*line = ft_strdup("");
+		return (0);
 	}
 	*line = grep_found_line(tmp_buf);
 	if (!check_line(tmp_buf))
