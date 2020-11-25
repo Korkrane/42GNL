@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:24:58 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/13 00:18:12 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/25 15:20:43 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@ size_t	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 		i++;
 	return (i);
 }
 
-char	*ft_strdup(const char *s, size_t n)
+char	*ft_strdup(const char *s)
 {
 	size_t		i;
 	char		*new_str;
@@ -31,7 +33,7 @@ char	*ft_strdup(const char *s, size_t n)
 	new_str = malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!new_str)
 		return (NULL);
-	while (i < n)
+	while (i < ft_strlen(s))
 	{
 		new_str[i] = s[i];
 		i++;
@@ -40,60 +42,11 @@ char	*ft_strdup(const char *s, size_t n)
 	return (new_str);
 }
 
-char	*ft_strcat(char *dest, char const *src)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	while (dest[i])
-		i++;
-	while (src[j])
-	{
-		dest[i + j] = src[j];
-		j++;
-	}
-	dest[i + j] = '\0';
-	return (dest);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*fillstr;
-	int		tot_len;
-	char	*emptystr;
-
-	tot_len = ft_strlen(s1) + ft_strlen(s2);
-	if (tot_len == 0)
-	{
-		emptystr = malloc(sizeof(char) * 1);
-		emptystr[0] = '\0';
-		return (emptystr);
-	}
-	fillstr = malloc(sizeof(char) * tot_len + 1);
-	if (!fillstr)
-		return (NULL);
-	fillstr[0] = '\0';
-	ft_strcat(fillstr, s1);
-	ft_strcat(fillstr, s2);
-	fillstr[tot_len] = '\0';
-	return (fillstr);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == c)
-			return ((char*)s);
-		s++;
-	}
-	if (*s == c)
-		return ((char*)s);
-	else
-		return (0);
-}
+/*
+** Only twist with my ft_substr from my libft project is to use :
+** ft_strdup("") in case where start > ft_strlen(s) to save space and
+** not use ft_calloc
+*/
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -103,6 +56,10 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	i = 0;
 	if (!s)
 		return (NULL);
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (start + len > ft_strlen(s))
+		len = ft_strlen(s) - start;
 	if (!(str = malloc(sizeof(char) * (len + 1))))
 		return (NULL);
 	while (i < len)
@@ -110,5 +67,58 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		str[i] = s[start + i];
 		i++;
 	}
+	str[i] = '\0';
 	return (str);
+}
+
+/*
+** Return the string created by joining my buf and my tmp_buf
+*/
+
+char	*join_buf(int size_s1, char *s1, char *s2)
+{
+	unsigned int	i;
+	unsigned int	j;
+	char			*str;
+
+	i = 0;
+	j = 0;
+	if (!(str = malloc(sizeof(char) * (size_s1 + ft_strlen(s2) + 1))))
+		return (NULL);
+	while (i < ft_strlen(s1))
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (j < ft_strlen(s2))
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	return (str);
+}
+
+/*
+** Free the actual tmp_buf to avoid leaks by multiplying my call to this
+** fucntion during my reading loop. Then it will return the string created
+** by the join_buf function
+*/
+
+char	*free_then_join(char *s1, char *s2, int size_s1)
+{
+	int		i;
+	char	s1_copy[size_s1 + 1];
+
+	i = 0;
+	if (!s1)
+		return (ft_strdup(s2));
+	while (s1[i])
+	{
+		s1_copy[i] = s1[i];
+		i++;
+	}
+	s1_copy[i] = '\0';
+	free(s1);
+	return (join_buf(size_s1, s1_copy, s2));
 }
