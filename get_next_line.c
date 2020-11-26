@@ -6,7 +6,7 @@
 /*   By: bahaas <bahaas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 13:07:08 by bahaas            #+#    #+#             */
-/*   Updated: 2020/11/26 00:38:49 by bahaas           ###   ########.fr       */
+/*   Updated: 2020/11/26 00:57:44 by bahaas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,26 @@ char	*grep_found_line(char *tmp_buf)
 	return (current_line);
 }
 
-int		ln_and_lftvr(char *tmp_buf, char *leftover, int read_size, char **line)
+int		ln_and_lftvr(char *tmp_buf, char **leftover, int read_size, char **line)
 {
 	if (read_size == 0 && (tmp_buf == NULL || tmp_buf[0] == '\0'))
 	{
 		free(tmp_buf);
 		if (leftover == NULL)
-			free(leftover);
+			free(*leftover);
 		*line = ft_strdup("");
 		return (0);
 	}
 	*line = grep_found_line(tmp_buf);
 	if (!check_line(tmp_buf))
 	{
-		free(leftover);
-		leftover = NULL;
+		free(*leftover);
+		*leftover = NULL;
 		free(tmp_buf);
 		return (0);
 	}
-	free(leftover);
-	leftover = store_leftover(tmp_buf);
+	free(*leftover);
+	*leftover = store_leftover(tmp_buf);
 	free(tmp_buf);
 	return (1);
 }
@@ -119,5 +119,5 @@ int		get_next_line(int fd, char **line)
 	}
 	return (0);
 	*/
-	return (ln_and_lftvr(tmp_buf, leftover, read_size, line));
+	return (ln_and_lftvr(tmp_buf, &leftover, read_size, line));
 }
